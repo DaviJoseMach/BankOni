@@ -1,0 +1,19 @@
+Defina a estrutura de classes:
+
+Crie uma classe Ação para representar uma ação no mercado de ações. Ela pode conter informações como nome da empresa, símbolo da ação, preço atual, variação percentual, etc.
+Crie uma classe MercadoAcoes que será responsável por gerenciar as ações disponíveis e as transações no mercado.
+Crie uma classe Investidor para representar um investidor que participa do mercado de ações. Ela pode conter informações como nome do investidor, saldo disponível, lista de ações possuídas, etc.
+Implemente as funcionalidades:
+
+Permita que o mercado de ações liste todas as ações disponíveis.
+Permita que os investidores comprem e vendam ações.
+Implemente a lógica para atualizar os preços das ações com base em eventos aleatórios ou em uma lógica pré-definida.
+Calcule o valor total do portfólio de um investidor com base nas ações que ele possui e nos preços atuais.
+Implemente recursos adicionais, como histórico de transações, gráficos de desempenho, etc.
+Crie uma interface gráfica (opcional):
+
+Se desejar, você pode criar uma interface gráfica usando JavaFX ou Swing para tornar o jogo mais interativo e visualmente atraente. Isso permitirá que os usuários interajam com o mercado de ações de forma mais amigável.
+Teste e aprimore seu projeto:
+
+Teste diferentes cenários e casos de uso para garantir que seu projeto funcione corretamente e que as regras do mercado de ações sejam respeitadas.
+Adicione recursos adicionais ou faça melhorias conforme necessário para tornar o jogo mais interessante e desafiador.
