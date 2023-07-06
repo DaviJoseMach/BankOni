@@ -1,6 +1,7 @@
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -27,7 +28,7 @@ public class bank {
         // ... Adicione outras ações aqui
 
         List<AcaoComprada> acoesCompradas = new ArrayList<>();
-        double capitalAtual = 1000.00; // Defina o capital inicial aqui
+        double capital = 1000.00; // Defina o capital inicial aqui
 
         Scanner scanner = new Scanner(System.in);
         while (true) {
@@ -38,16 +39,16 @@ public class bank {
             } else if ("/sair".equalsIgnoreCase(comando)) {
                 break;
             } else if (comando.startsWith("/comprar")) {
-                comprarAcao(comando, acoes, acoesCompradas, capitalAtual);
+                comprarAcao(comando, acoes, acoesCompradas, capital);
             } else if (comando.startsWith("/vender")) {
-                venderAcao(comando, acoesCompradas, capitalAtual);
+                venderAcao(comando, acoesCompradas, capital);
             } else if ("/port".equalsIgnoreCase(comando)) {
                 mostrarAcoesCompradas(acoesCompradas, acoes);
-                mostrarCapital(capitalAtual);
+                mostrarCapital(capital);
             } else if ("/limpar".equalsIgnoreCase(comando)) {
                 limparPortfolio(acoesCompradas);
             } else if ("/capital".equalsIgnoreCase(comando)) {
-                mostrarCapital(capitalAtual);
+                mostrarCapital(capital);
             } else if (comando.matches("\\d+")) {
                 int opcao = Integer.parseInt(comando);
                 selecionarAcao(opcao, acoes);
@@ -55,6 +56,10 @@ public class bank {
             else if ("/help".equalsIgnoreCase(comando)) {
                 exibirComandosDisponiveis();
             }
+            else if ("/multi".equalsIgnoreCase(comando)) {
+                    jogarCaraOuCoroa(scanner, capital);
+            }
+
             else {
                 System.out.println("Comando inválido!");
                 System.out.println();
@@ -62,6 +67,47 @@ public class bank {
         }
         scanner.close();
     }
+
+    public static void jogarCaraOuCoroa(Scanner scanner, double capitalAtual) {
+    System.out.print("Digite o valor para jogar 'cara ou coroa': ");
+
+    // Verificar se a entrada é um número válido
+    double valorJogo;
+    while (true) {
+        try {
+            valorJogo = scanner.nextDouble();
+            break;
+        } catch (InputMismatchException e) {
+            System.out.println("Valor inválido. Digite um número válido: ");
+            scanner.nextLine(); // Limpar o buffer de entrada
+        }
+    }
+    scanner.nextLine(); // Limpar o buffer de entrada
+
+    if (valorJogo > capitalAtual) {
+        System.out.println("Você não possui dinheiro suficiente para jogar.");
+        System.out.println();
+    } else {
+        Random random = new Random();
+        boolean cara = random.nextBoolean();
+        System.out.println("Jogando 'cara ou coroa'...");
+        System.out.println();
+
+        if (cara) {
+            System.out.println("Caiu CARA!");
+            capitalAtual -= valorJogo;
+            System.out.println("Você perdeu R$" + valorJogo);
+        } else {
+            System.out.println("Caiu COROA!");
+            double novoCapital = capitalAtual + valorJogo;
+            System.out.println("Seu capital foi multiplicado de R$" + capitalAtual + " para R$" + novoCapital);
+            capitalAtual = novoCapital;
+        }
+        System.out.println();
+    }
+}
+
+
     public static void exibirComandosDisponiveis() {
         System.out.println("Comandos disponíveis:");
         System.out.println("/acoes - Exibir a lista de ações disponíveis");
@@ -69,6 +115,7 @@ public class bank {
         System.out.println("/vender <número da ação> <quantidade> - Vender uma quantidade específica de ações");
         System.out.println("/port - Exibir as ações compradas");
         System.out.println("/capital - Exibir o capital total");
+        System.out.println("/multi - <quantidade que deseja apostar> - Aposta uma determinada quantia do seu capital");
         System.out.println("/limpar - Limpa seu portfolio");
         System.out.println("/sair - Encerrar o programa");
         System.out.println();
@@ -119,6 +166,8 @@ public class bank {
         System.out.println("Valor atual: R$" + decimalFormat.format(valorAtual));
         System.out.println();
     }
+    
+
 
     public static void comprarAcao(String comando, Map<String, String> acoes, List<AcaoComprada> acoesCompradas, double capitalAtual) {
         String[] partes = comando.split("\\s+");

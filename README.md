@@ -59,6 +59,16 @@ If you want to contribute to the project, please follow the steps below:
 4. Commit your changes: `git commit -m 'My modification'`.
 5. Push to branch: `git push origin my-modification`.
 6. Open a pull request on the original repository.
+----
+
+## Relases 
+
+- **1.0** - initial version of the project
+- **1.0.1**  - bug ***fixing*** and ~~deploy update~~
+- **1.3** - (add -> `/clean ; /port ; /capital; /help`; commands)
+bug *fixing and adding more* ~~lol~~
+- **1.4** - (add + `/clear (fixed)` ; new scripts ; code organization main ***(bank.java)*** + ("bet" system with 
+your capital))
 
 ## Contact
 - [My Twitter](https://twitter.com/davvzin)

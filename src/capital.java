@@ -1,7 +1,7 @@
 import java.text.DecimalFormat;
 
 public class capital {
-    private static double capital = 1000.0; // Capital inicial
+    private static double capital = 1500.0; // Capital inicial
 
     public static void main(String[] args) {
         mostrarCapital();
