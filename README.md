@@ -40,6 +40,7 @@ BankOni's main features include:
 - `/port`: Displays the current portfolio with the purchased shares and their values.
 - `/capital`: Displays the total amount of available capital.
 - `/clear`: Clears the portfolio, removing all purchased shares.
+- `/multi <quantity>`: bet a certain amount of your capital on heads or tails, being able to double or lose the entire amount
 - `/help`: Displays the list of available commands.
 
 ## Examples of Usage
@@ -69,6 +70,7 @@ If you want to contribute to the project, please follow the steps below:
 bug *fixing and adding more* ~~lol~~
 - **1.4** - (add + `/clear (fixed)` ; new scripts ; code organization main ***(bank.java)*** + ("bet" system with 
 your capital))
+- **1.4.2** - I repair the Readme Fixed bugs in redmi and added functions that were not in ***1.4***
 
 ## Contact
 - [My Twitter](https://twitter.com/davvzin)
