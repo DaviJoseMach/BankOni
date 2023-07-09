@@ -6,6 +6,44 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.security.Key;
+import java.io.BufferedReader;
+
+class InformacoesSistema {
+    private static String versao = "Versão **";
+    private static String key = "#$#$#$#$";
+
+    public static void exibirTabela(double capital, List<AcaoComprada> acoesCompradas) {
+        System.out.println("+-----------------------------------------+");
+        System.out.println("|             Informações do Sistema      |");
+        System.out.println("+-----------------------------------------+");
+        System.out.println("| Portfolio      | Capital      | Versão   |");
+        System.out.println("+-----------------------------------------+");
+        System.out.printf("| %-14s | R$ %-9.2f | %-8s |\n", obterPortfolio(acoesCompradas), capital, versao);
+        System.out.println("+-----------------------------------------+");
+        System.out.println("|                 Key                     |");
+        System.out.println("+-----------------------------------------+");
+        System.out.println("| " + key + "                   |");
+        System.out.println("+-----------------------------------------+");
+        System.out.println();
+    }
+
+    private static String obterPortfolio(List<AcaoComprada> acoesCompradas) {
+        StringBuilder portfolio = new StringBuilder();
+        for (AcaoComprada acao : acoesCompradas) {
+            portfolio.append(acao.getNome());
+            portfolio.append(": ");
+            portfolio.append(acao.getQuantidade());
+            portfolio.append(", ");
+        }
+        return portfolio.toString();
+    }
+}
+
+
 
 public class bank {
     public static void main(String[] args) {
@@ -16,7 +54,11 @@ public class bank {
         acoes.put("GOOGL", "Alphabet Inc.");
         acoes.put("FB", "Facebook, Inc.");
         acoes.put("TSLA", "Tesla, Inc.");
-        acoes.put("JPM", "JPMorgan Chase & Co.");
+        List<AcaoComprada> acoesCompradas = new ArrayList<>();
+        double capital = 1000.00; // Defina o capital inicial aqui
+
+        Scanner scanner = new Scanner(System.in);
+        while (true) {acoes.put("JPM", "JPMorgan Chase & Co.");
         acoes.put("JNJ", "Johnson & Johnson");
         acoes.put("V", "Visa Inc.");
         acoes.put("PG", "Procter & Gamble Company");
@@ -27,11 +69,6 @@ public class bank {
         acoes.put("BRK-A", "Berkshire Hathaway Inc.");
         // ... Adicione outras ações aqui
 
-        List<AcaoComprada> acoesCompradas = new ArrayList<>();
-        double capital = 1000.00; // Defina o capital inicial aqui
-
-        Scanner scanner = new Scanner(System.in);
-        while (true) {
             System.out.print("Digite o comando (/help para ver todos os comandos disponíveis): ");
             String comando = scanner.nextLine();
             if ("/acoes".equalsIgnoreCase(comando)) {
@@ -49,12 +86,45 @@ public class bank {
                 limparPortfolio(acoesCompradas);
             } else if ("/capital".equalsIgnoreCase(comando)) {
                 mostrarCapital(capital);
-            } else if (comando.matches("\\d+")) {
+            }   
+            else if (comando.matches("\\d+")) {
                 int opcao = Integer.parseInt(comando);
                 selecionarAcao(opcao, acoes);
             } 
+            else if ("/table".equalsIgnoreCase(comando)) {
+                InformacoesSistema.exibirTabela(capital, acoesCompradas);
+            }
+            
+           else if ("/key".equalsIgnoreCase(comando)) {
+                key.exibirSenha();
+            }       else if ("/keyreset".equalsIgnoreCase(comando)) {
+                 key.resetarSenha(scanner);
+            }
+
             else if ("/help".equalsIgnoreCase(comando)) {
                 exibirComandosDisponiveis();
+            }
+            else if ("/teste".equalsIgnoreCase(comando)) {
+                // Simulação de adição de muito dinheiro ao capital
+                capital += 1000000.00;
+                
+                // Simulação de compra automática de todas as ações disponíveis
+                for (String acao : acoes.keySet()) {
+                    int quantidade = 100; // Quantidade a ser comprada (pode ser ajustada conforme necessário)
+                    double valorAcao = obterValorAcao(acao);
+                    double valorTotal = valorAcao * quantidade;
+            
+                    if (valorTotal > capital) {
+                        System.out.println("Você não possui dinheiro suficiente para comprar " + quantidade + " ações de " + acao);
+                    } else {
+                        AcaoComprada acaoComprada = new AcaoComprada(acao, quantidade);
+                        acoesCompradas.add(acaoComprada);
+                        capital -= valorTotal;
+                        System.out.println("Ação " + acao + " comprada! Quantidade: " + quantidade);
+                    }
+                }
+                System.out.println("Comando /teste executado com sucesso!");
+                System.out.println();
             }
             else if ("/multi".equalsIgnoreCase(comando)) {
                     jogarCaraOuCoroa(scanner, capital);
@@ -66,6 +136,44 @@ public class bank {
             }
         }
         scanner.close();
+    }
+
+    //FUNÇÕES DA KEY
+    public static void exibirSenha() {
+        try {
+            Process process = Runtime.getRuntime().exec("java Key");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+    
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
+    
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public static void resetarSenha() {
+        try {
+            Process process = Runtime.getRuntime().exec("java Key");
+            PrintWriter writer = new PrintWriter(process.getOutputStream());
+            writer.println("/keyreset");
+            writer.flush();
+    
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+    
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
+    
+            writer.close();
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void jogarCaraOuCoroa(Scanner scanner, double capitalAtual) {
@@ -117,9 +225,15 @@ public class bank {
         System.out.println("/capital - Exibir o capital total");
         System.out.println("/multi - <quantidade que deseja apostar> - Aposta uma determinada quantia do seu capital");
         System.out.println("/limpar - Limpa seu portfolio");
+        System.out.println("/teste - Ativar modo de teste com ações compradas e capital alto");
+        System.out.println("/key - exibe a chave do sistema");
+        System.out.println("/keyreset - reinicia a key do sistema");
+         System.out.println("/table - mostra algumas informações do sistema em forma de tabela");
         System.out.println("/sair - Encerrar o programa");
         System.out.println();
     }
+
+    
 
     public static void exibirAcoes(Map<String, String> acoes) {
         System.out.println("Ações disponíveis:");
@@ -267,6 +381,7 @@ public class bank {
     public static void mostrarCapital(double capitalAtual) {
         DecimalFormat decimalFormat = new DecimalFormat("0.00");
         System.out.println("Capital atual: R$" + decimalFormat.format(capitalAtual));
+
         System.out.println();
     }
 
